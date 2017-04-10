@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"strings"
 )
 
 func packInt8(v int8) (r []byte, err error) {
@@ -90,7 +91,7 @@ func unpackInt64(b []byte) (pi int64, err error) {
 }
 
 // unpackFloat64 Double (0,8).unpack('G)
-func unpackFloat64(b []byte) (rs float64, err error) {
+func unpackFloat64(b []byte) (pi float64, err error) {
 	if err = binary.Read(bytes.NewReader(b), binary.BigEndian, &pi); err != nil {
 		return
 	}

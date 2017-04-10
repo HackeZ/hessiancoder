@@ -36,7 +36,7 @@ func encodeBinary(v []byte) (b []byte, err error) {
 		packB, err := packUInt16(ChunkSize)
 		if err != nil {
 			fmt.Println("can not packUInt16 for ", ChunkSize)
-			return
+			return b, err
 		}
 		b = append(b, packB...)
 		b = append(b, v[offset:ChunkSize]...)
