@@ -1,6 +1,7 @@
 package hessiancoder
 
 import (
+	"fmt"
 	"log"
 	"runtime"
 )
@@ -28,5 +29,28 @@ func encodeBinary(v []byte) (b []byte, err error) {
 		b = append(b, v...)
 		return b, err
 	}
-	
+
+	offset := 0
+	for length := len(v); length-offset > ChunkSize; {
+		b = append(b, 'b')
+		packB, err := packUInt16(ChunkSize)
+		if err != nil {
+			fmt.Println("can not packUInt16 for ", ChunkSize)
+			return
+		}
+		b = append(b, packB...)
+		b = append(b, v[offset:ChunkSize]...)
+
+		offset += ChunkSize
+	}
+
+	b = append(b, 'B')
+	packB, err := packUInt16(uint16(len(v) - offset))
+	if err != nil {
+		fmt.Println("can not packUInt16 for ", len(v)-offset)
+		return
+	}
+	b = append(b, packB...)
+	b = append(b, v[offset:]...)
+	return
 }
